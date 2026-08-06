@@ -32,13 +32,17 @@ ${resumeText}`;
 };
 
 export const generateFirstQuestion = async (profile) => {
-    const prompt = `You are a Senior Technical Interviewer. The candidate is ready.
+    const prompt = `You are a Strict Senior Technical Interviewer. The candidate is ready.
 Role: ${profile.role}
 Skills: ${profile.skills.join(', ')}
 Experience: ${profile.experienceYears} years
 
-Ask the very first technical interview question based on their profile to start the interview.
-Keep the question practical and under 30 words.
+Start the interview by asking the very first technical question.
+STRICT RULES:
+1. Pick exactly ONE core skill from the candidate's skills list to start.
+2. DO NOT ask about any technology, framework, or language NOT mentioned in the skills list.
+3. Keep the question practical, scenario-based, and under 30 words.
+
 Return ONLY the question string, no formatting, no extra text.`;
 
     try {
@@ -54,10 +58,9 @@ Return ONLY the question string, no formatting, no extra text.`;
     }
 };
 
-// Yahan mene currentQuestion add kiya hai taaki AI exact answer evaluate kar sake
 export const generateNextQuestion = async (profile, chatHistory, currentQuestion, userAnswer) => {
-    const prompt = `You are a Senior Technical Interviewer interviewing a candidate for a ${profile.role} role.
-Skills: ${profile.skills.join(', ')}
+    const prompt = `You are a Strict Senior Technical Interviewer interviewing a candidate for a ${profile.role} role.
+Candidate's Full Skillset: ${profile.skills.join(', ')}
 
 Here is the conversation history so far:
 ${chatHistory}
@@ -66,13 +69,17 @@ The candidate just answered this question: "${currentQuestion}"
 Their answer: "${userAnswer}"
 
 Your task:
-1. Briefly evaluate their answer. Provide a constructive "feedback" explaining what was right/wrong and the ideal approach.
-2. Ask the NEXT technical interview question based on their skills or as a follow-up. Keep it under 40 words.
+1. Briefly evaluate their answer. Provide constructive "feedback" explaining what was right/wrong and the ideal approach.
+2. Ask the NEXT technical interview question based on these STRICT RULES:
+   - DIVERSIFY TOPICS: Look at the chat history. If you have already asked a question about a specific skill, you MUST switch to a completely DIFFERENT skill from their skillset for this next question. Rotate through their skills.
+   - OUT-OF-SYLLABUS FORBIDDEN: Strictly restrict your questions to the "Candidate's Full Skillset" provided above. Do NOT ask about tools, concepts, or languages they do not know.
+   - Limit follow-ups to a maximum of ONE before changing the topic.
+   - Keep the question practical, conceptual, and under 40 words.
 
 Return ONLY a valid JSON object matching this exact schema:
 {
-  "feedback": "string (Your evaluation of their current answer)",
-  "nextQuestion": "string (The next interview question)"
+  "feedback": "string (Your short evaluation of their current answer)",
+  "nextQuestion": "string (The next interview question covering a different skill)"
 }`;
 
     try {
@@ -92,7 +99,6 @@ Return ONLY a valid JSON object matching this exact schema:
     }
 };
 
-// Yahan bhi currentQuestion aur userAnswer add kiya hai final feedback ke liye
 export const generateFinalEvaluation = async (profile, chatHistory, currentQuestion, userAnswer) => {
     const prompt = `You are a Senior Technical Interviewer. The interview is now complete.
 Candidate Role: ${profile.role}
