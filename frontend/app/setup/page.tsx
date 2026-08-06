@@ -53,7 +53,7 @@ function SetupContent() {
                 return;
             }
             try {
-                const response = await axios.get(`http://localhost:5000/api/v1/user/${userId}`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/${userId}`);
                 if (response.data.success) {
                     setUserData(response.data.user);
                 }
@@ -70,7 +70,7 @@ function SetupContent() {
     const handleStartInterview = async () => {
         setStarting(true);
         try {
-            const response = await axios.post("http://localhost:5000/api/v1/interview/start", {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interview/start`, {
                 userId,
                 totalQuestions: questions,
             });

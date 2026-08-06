@@ -69,7 +69,7 @@ export default function Home() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/user/parse-resume",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/parse-resume`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

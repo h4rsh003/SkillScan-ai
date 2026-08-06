@@ -121,7 +121,7 @@ export default function InterviewRoom() {
             if (!interviewId) return;
 
             try {
-                const response = await axios.get(`http://localhost:5000/api/v1/interview/${interviewId}`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interview/${interviewId}`);
                 if (response.data.success) {
                     const interview = response.data.interview;
 
@@ -187,7 +187,7 @@ export default function InterviewRoom() {
 
         setSubmitting(true);
         try {
-            const response = await axios.post("http://localhost:5000/api/v1/interview/answer", {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interview/answer`, {
                 interviewId,
                 answer,
             });

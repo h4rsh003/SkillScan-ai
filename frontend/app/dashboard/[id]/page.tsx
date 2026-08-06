@@ -41,7 +41,7 @@ export default function Dashboard() {
             if (!interviewId) return;
 
             try {
-                const response = await axios.get(`http://localhost:5000/api/v1/interview/${interviewId}`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interview/${interviewId}`);
                 if (response.data.success) {
                     setInterviewData(response.data.interview);
                 }
